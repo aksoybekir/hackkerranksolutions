@@ -1,0 +1,83 @@
+import java.io.*;
+import java.util.*;
+
+public class Solution {
+    static int[] hide(int[] f, int[] w) {
+        int[] result = new int[f.length];
+        
+        Map<Integer, Integer>  map = new TreeMap<Integer, Integer>();
+        Map<Integer, Integer>  mapcheck = new TreeMap<Integer, Integer>();
+        String a = "";
+        
+        for(int i = 0; i < w.length; i++) {
+            mapcheck.put(w[i], i+1);
+            if (map.containsKey(w[i])){
+                map.put(w[i], map.get(w[i]) + 1);
+            }
+            else
+                map.put(w[i], 1);
+        }
+        
+        Iterator<Map.Entry<Integer, Integer>> it = map.entrySet().iterator();
+        
+        for(int i =0; i<f.length; i++) {
+            if(map.containsKey(f[i])) {
+                if(map.get(f[i]) == 1) {
+                    result[i] = mapcheck.get(f[i]);
+                }
+                else 
+                    result[i] = -1;
+            }
+            else
+                result[i] = -1;
+        }
+        
+        
+        
+        return result;
+    }
+
+    private static final Scanner scanner = new Scanner(System.in);
+
+    public static void main(String[] args) throws IOException {
+        BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(System.getenv("OUTPUT_PATH")));
+
+        String[] wf = scanner.nextLine().split(" ");
+        scanner.skip("(\r\n|[\n\r\u2028\u2029\u0085])?");
+        int w = Integer.parseInt(wf[0]);
+        
+        int[] wall = new int[w];
+
+        String[] arrItems = scanner.nextLine().split(" ");
+        scanner.skip("(\r\n|[\n\r\u2028\u2029\u0085])?");
+
+        for (int i = 0; i < w; i++) {
+            int arrItem = Integer.parseInt(arrItems[i]);
+            wall[i] = arrItem;
+        }
+
+        int f = Integer.parseInt(wf[1]);
+        
+        int[] friend = new int[f];
+
+        String[] brrItems = scanner.nextLine().split(" ");
+
+        for (int i = 0; i < f; i++) {
+            int brrItem = Integer.parseInt(brrItems[i]);
+            friend[i] = brrItem;
+        }
+
+        int[] result = hide(friend,wall);
+
+        for (int i = 0; i < result.length; i++) {
+            bufferedWriter.write(String.valueOf(result[i]));
+            bufferedWriter.newLine();
+            
+        }
+
+
+        bufferedWriter.close();
+
+        scanner.close();
+    }
+}
