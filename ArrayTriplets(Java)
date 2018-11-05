@@ -1,0 +1,43 @@
+import java.io.*;
+import java.util.*;
+
+public class Solution {
+
+    private static final Scanner scanner = new Scanner(System.in);
+    static int result = 0;
+
+    public static void main(String[] args) {
+        // TODO Auto-generated method stub
+        
+        int n = scanner.nextInt();
+        scanner.skip("(\r\n|[\n\r\u2028\u2029\u0085])?");
+
+        long[] arr = new long[n];
+
+        String[] arrItems = scanner.nextLine().split(" ");
+
+        for (int i = 0; i < n; i++) {
+            long arrItem = Long.parseLong(arrItems[i]);
+            arr[i] = arrItem;
+        }
+        rec(arr,0,0,0,false,false,false,0);
+        System.out.println(result);
+    }
+    
+    static void rec(long arr[], long n_one, long n_two, long n_three, boolean one, boolean two, boolean three, int counter) {
+        
+        if(counter == arr.length) {
+            if(one & two & three & n_one == n_two & n_two == n_three) {
+                result ++;
+            }
+            return;
+        }
+        
+        rec(arr, n_one + arr[counter], n_two, n_three, true, two, three, counter+1);
+        rec(arr, n_one, n_two + arr[counter], n_three, one, true, three, counter+1);
+        rec(arr, n_one, n_two, n_three + arr[counter], one, two, true, counter+1);
+    
+    }
+    
+
+}
