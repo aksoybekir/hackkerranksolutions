@@ -1,0 +1,236 @@
+import java.io.*;
+import java.math.*;
+import java.security.*;
+import java.text.*;
+import java.util.*;
+import java.util.concurrent.*;
+import java.util.regex.*;
+
+public class Solution {
+
+    // Complete the bomberMan function below.
+     static String[] bomberMan(int n, String[] grid) {
+        
+        int sn = n;
+        String [] grid_new = grid;
+        
+        int row = grid_new.length;
+        int column = grid_new[0].length();
+                
+        if( sn == 0 || sn==1 ){
+        }
+        
+        else if( sn % 2 == 0){
+            String element = "O";
+            for( int j =1 ; j< column; j++){
+                    element += "O";
+                }
+            for (int i =0; i < row; i++){
+                grid_new[i] = element;      
+            }
+        }
+        
+        
+        else if( (sn+1) % 4 == 0){
+            //first changed matrix
+            grid_new = change(grid_new);
+            
+        }
+        else if( (sn-1) % 4 == 0){
+            //second changed matrix
+            grid_new = change(grid_new);
+            grid_new = change(grid_new);
+            
+        }
+
+        return grid_new;
+    }
+    
+    static String[] change(String[] grid) {
+        int row = grid.length;
+        int column = grid[0].length();
+        int total = row*column;
+        
+        String[][] new_grid = new String[row][column];
+                
+        for(int i =0; i<row; i++) {
+            for(int t=0; t<column;t++) {
+                new_grid[i][t] = "O";
+            }
+        }
+                
+        String[] status = new String[total];
+        
+        for(int i =0; i<row ;i++) {
+            char [] line = grid[i].toCharArray();
+            for(int t=0; t<column;t++) {
+                status[(i*column)+t] = String.valueOf(line[t]);
+            }
+        }
+        
+        
+        for(int i=0; i<total; i++) {
+            char c = status[i].charAt(0);
+            if( c == 'O'){
+                if(column == 1 && row == 1) {
+                    if(i == 0) {
+                        new_grid[0][0] = ".";
+                    }
+                }
+                else if(column == 1) {
+                    if(i == 0) {
+                        new_grid[0][0] = ".";
+                        new_grid[i+1][0] = ".";
+                    }
+                    else if(i == total-1) {
+                        new_grid[i][0] = ".";
+                        new_grid[i-1][0] = ".";
+                    }
+                    else {
+                        new_grid[i][0] = ".";
+                        new_grid[i+1][0] = ".";
+                        new_grid[i-1][0] = ".";
+                    }
+                }
+                else if(row == 1) {
+                    if(i == 0) {
+                        new_grid[0][0] = ".";
+                        new_grid[0][i+1] = ".";
+                    }
+                    else if(i == total-1) {
+                        new_grid[0][i] = ".";
+                        new_grid[0][i-1] = ".";
+                    }
+                    else {
+                        new_grid[0][i] = ".";
+                        new_grid[0][i-1] = ".";
+                        new_grid[0][i+1] = ".";
+                    }
+                }
+                
+                else if(i < column && column >1 && row >1) {
+                    if(i%column == 0) {
+                        new_grid[0][0] = ".";
+                        new_grid[0][1] = ".";
+                        new_grid[1][0] = ".";
+                        continue;
+                    }
+                    else if(i%column == column-1) {
+                        new_grid[0][column-1] = ".";
+                        new_grid[0][column-2] = ".";
+                        new_grid[1][column-1] = ".";
+                        continue;
+                    }
+                    else {
+                        new_grid[0][(i%column)] = ".";
+                        new_grid[0][(i%column)+1] = ".";
+                        new_grid[0][(i%column)-1] = ".";
+                        new_grid[1][i%column] = ".";
+                        continue;
+                    }
+                }
+                else if(i >((row-1)*column)-1 && column >1 && row >1) {
+                    if(i%column == 0) {
+                        new_grid[row-2][0] = ".";
+                        new_grid[row-1][1] = ".";
+                        new_grid[row-1][0] = ".";
+                        continue;
+                    }
+                    else if(i%column == column-1) {
+                        new_grid[row-1][column-1] = ".";
+                        new_grid[row-1][column-2] = ".";
+                        new_grid[row-2][column-1] = ".";
+                        continue;
+                    }
+                    else {
+                        new_grid[row-1][(i%column)] = ".";
+                        new_grid[row-1][(i%column)+1] = ".";
+                        new_grid[row-1][(i%column)-1] = ".";
+                        new_grid[row-2][i%column] = ".";
+                        continue;
+                    }
+                }
+                else if(i%column == 0 && column >1 && row >1) {
+                    int current_row = (int)Math.floor(i/column);
+                    
+                    
+                    new_grid[current_row][(i%column)] = ".";
+                    new_grid[current_row][(i%column)+1] = ".";
+                    new_grid[current_row+1][(i%column)] = ".";
+                    new_grid[current_row-1][i%column] = ".";
+                    continue;
+                }
+                else if(i%column == column-1 && column >1 && row >1) {
+                    int current_row = (int)Math.floor(i/column);
+                    
+                    new_grid[current_row][(i%column)] = ".";
+                    new_grid[current_row][(i%column)-1] = ".";
+                    new_grid[current_row+1][(i%column)] = ".";
+                    new_grid[current_row-1][i%column] = ".";
+                    continue;
+                }
+                else if (column >1 && row >1){
+                    int current_row = (int)Math.floor(i/column);
+                                                            
+                    new_grid[current_row][(i%column)] = ".";
+                    new_grid[current_row][(i%column)-1] = ".";
+                    new_grid[current_row][(i%column)+1] = ".";
+                    new_grid[current_row+1][(i%column)] = ".";
+                    new_grid[current_row-1][i%column] = ".";
+
+                }
+                
+            }
+        }
+                
+        String[] turn_grid = new String[row];
+        
+        for(int i=0; i<row; i++) {
+            String a="";
+            for(int t=0; t<column; t++) {
+                a += new_grid[i][t];
+            }
+            turn_grid[i] =a;
+        }
+        
+        return turn_grid;   
+    }
+
+
+    private static final Scanner scanner = new Scanner(System.in);
+
+    public static void main(String[] args) throws IOException {
+        BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(System.getenv("OUTPUT_PATH")));
+
+        String[] rcn = scanner.nextLine().split(" ");
+
+        int r = Integer.parseInt(rcn[0]);
+
+        int c = Integer.parseInt(rcn[1]);
+
+        int n = Integer.parseInt(rcn[2]);
+
+        String[] grid = new String[r];
+
+        for (int i = 0; i < r; i++) {
+            String gridItem = scanner.nextLine();
+            grid[i] = gridItem;
+        }
+
+        String[] result = bomberMan(n, grid);
+
+        for (int i = 0; i < result.length; i++) {
+            bufferedWriter.write(result[i]);
+
+            if (i != result.length - 1) {
+                bufferedWriter.write("\n");
+            }
+        }
+
+        bufferedWriter.newLine();
+
+        bufferedWriter.close();
+
+        scanner.close();
+    }
+}
