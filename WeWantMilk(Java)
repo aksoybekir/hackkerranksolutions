@@ -1,0 +1,80 @@
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.TreeMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Scanner;
+
+public class Solution {
+    
+    static long minmoney(long[] arr,long[] prr, long liter) {
+        long ans = 0;
+    
+        Map<Long, Long> map =new TreeMap<Long, Long>();
+        for(int i = 0; i<arr.length; i++) {
+            if(map.containsKey(prr[i])) {
+                long v = map.get(prr[i]);            
+                map.put(prr[i], v + arr[i]);
+            }
+            else {
+                map.put(prr[i], arr[i]);
+            }
+        }
+        
+        Iterator<Map.Entry<Long, Long>> it = map.entrySet().iterator();
+        
+        while (it.hasNext()) {
+            Map.Entry<Long, Long> pair = it.next();
+            if(pair.getValue() >= liter){
+                ans += pair.getKey() * liter;
+                break;
+            }
+            else{
+                ans = ans +  pair.getKey() * pair.getValue();
+                liter = liter - pair.getValue();
+            }
+        }
+       
+
+                
+        return ans;
+    }
+
+    private static final Scanner scanner = new Scanner(System.in);
+
+    public static void main(String[] args) throws IOException {
+
+        BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(System.getenv("OUTPUT_PATH")));
+        
+        String[] cl = scanner.nextLine().split(" ");
+        scanner.skip("(\r\n|[\n\r\u2028\u2029\u0085])?");
+        
+        int cows = Integer.parseInt(cl[0]);
+        long liter = Long.parseLong(cl[1]);
+        
+        long[] arr = new long[cows];
+        long[] prr = new long[cows];
+        
+        for(int i =0; i<cows; i++) {
+            String[] ar = scanner.nextLine().split(" ");
+            long a = Long.parseLong(ar[0]);
+            long b = Long.parseLong(ar[1]);
+            prr[i] = a;
+            arr[i] = b;
+        } 
+
+        String a =String.valueOf(minmoney(arr, prr, liter));
+        bufferedWriter.write(a);
+        
+        bufferedWriter.newLine();
+
+        bufferedWriter.close();
+        scanner.close();    
+    }
+
+}
