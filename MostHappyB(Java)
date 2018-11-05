@@ -1,0 +1,45 @@
+import java.io.*;
+import java.util.*;
+
+public class Solution {
+    static long minsadness(long[] arr){
+        long minb = 111111111;
+        long[] ar =arr;
+        Arrays.sort(ar);
+        
+        if(arr.length % 2 == 0){
+            minb = ar[ar.length / 2];
+        }
+        else
+            minb = ar[((ar.length - 1) / 2)];
+                
+        long min = 0;
+        for(int i = 0; i<arr.length; i++){
+            min += Math.abs(arr[i] - minb);
+        }
+        return min;
+    }
+    public static void main(String[] args) throws IOException {
+        BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(System.getenv("OUTPUT_PATH")));
+
+        Scanner s = new Scanner(System.in);
+        int a = s.nextInt();
+        s.skip("(\r\n|[\n\r\u2028\u2029\u0085])?");
+
+        
+        long[] arr = new long[a];
+        String[] arrItems = s.nextLine().split(" ");
+        s.skip("(\r\n|[\n\r\u2028\u2029\u0085])?");
+        
+        for(int i =0; i<a;i++){
+            long num = Long.parseLong(arrItems[i]);
+            arr[i] = num - 1 - i;
+        }
+        
+        long ans = minsadness(arr);
+        bufferedWriter.write(String.valueOf(ans));
+        
+        bufferedWriter.close();
+        s.close();
+    }
+}
