@@ -1,0 +1,62 @@
+import java.io.*;
+import java.util.*;
+
+public class Solution {
+
+    public static void main(String[] args) {
+        /* Enter your code here. Read input from STDIN. Print output to STDOUT. Your class should be named Solution. */
+        Scanner s = new Scanner(System.in);
+        int n = s.nextInt();
+        s.skip("(\r\n|[\n\r\u2028\u2029\u0085])?");
+        
+        Map<Integer,Integer> toleft = new TreeMap<Integer,Integer>();
+        Map<Integer,Integer> toright = new TreeMap<Integer,Integer>();
+        
+        for(int i =0; i<n; i++){
+            String[] line = s.nextLine().split(" ");
+            int a = Integer.parseInt(line[0]);
+            int b = Integer.parseInt(line[1]);
+            
+            if(b < 0) {
+                if(toleft.containsKey(a)){
+                    if(toleft.get(a) < b){
+                        toleft.put(a, b);
+                    }
+                }
+                else
+                    toleft.put(a, b);
+            }
+            else {
+                if(toright.containsKey(a)){
+                    if(toright.get(a) < b){
+                        toright.put(a, b);
+                    }
+                }
+                else
+                    toright.put(a, b);
+            }
+        }
+        
+        double val = Double.MAX_VALUE;
+        
+        Iterator<Map.Entry<Integer, Integer>> right = toright.entrySet().iterator();
+        
+        while (right.hasNext()) {
+            Map.Entry<Integer, Integer> pair = right.next();
+            Iterator<Map.Entry<Integer, Integer>> left = toleft.entrySet().iterator();
+            while(left.hasNext()) {
+                Map.Entry<Integer, Integer> pairleft = left.next();
+                if(pair.getKey() < pairleft.getKey()) {
+                    double v = (double)(pair.getKey() - pairleft.getKey()) / (double)(pairleft.getValue()-pair.getValue());
+                    if( v < val)
+                        val = v;
+                }
+            }
+        }
+        if( val == Double.MAX_VALUE) {
+            System.out.println("-1");
+        }
+        else
+            System.out.println(val);
+    }
+}
