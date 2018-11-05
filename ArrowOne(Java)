@@ -1,0 +1,23 @@
+import java.io.*;
+import java.util.*;
+
+public class Solution {
+
+    public static void main(String[] args) {
+        int[] arrows = new int[1111111];
+        int ans=0;
+        Scanner scan = new Scanner(System.in);
+        
+        int n = scan.nextInt();
+        
+        while(n-- > 0){
+            int balon = scan.nextInt();
+            if(arrows[balon] != 0)
+                arrows[balon]--;
+            else
+                ans++;
+            arrows[balon-1]++;          
+        }
+        System.out.println(ans);
+    }
+}
