@@ -1,0 +1,33 @@
+import java.io.*;
+import java.text.DecimalFormat;
+import java.util.*;
+
+public class Solution {
+    static double radius(double[] arr, int way) {
+        
+        double result = arr[0];
+        if(way -arr[arr.length - 1] > result)
+            result = way - arr[arr.length - 1];
+        
+        for (int i=0; i<arr.length-1; i++)
+            result= Math.max(result, (arr[i+1]-arr[i])/2 );
+        
+        return result;
+    }
+
+    private static final Scanner scanner = new Scanner(System.in);
+
+    public static void main(String[] args) throws IOException {
+        int n=scanner.nextInt();
+        int l=scanner.nextInt();
+        
+        List<Double> list = new ArrayList<Double>();
+
+        while (scanner.hasNextInt())
+              list.add(scanner.nextInt()*1.0);
+        Collections.sort(list); 
+        double[] arr = list.stream().mapToDouble(i->i).toArray();
+
+        System.out.println(radius(arr,l));
+    }
+}
